@@ -99,14 +99,16 @@
 #include "tmp006drv.h"
 #include "bma222drv.h"
 #include "pinmux.h"
+#include "hx711.h"
 
-#define APPLICATION_VERSION              "1.1.0"
-#define APP_NAME                         "Out of Box"
+#define APPLICATION_VERSION              "0.0.1"
+#define APP_NAME                         "CoffeeScale"
 #define OOB_TASK_PRIORITY                1
 #define SPAWN_TASK_PRIORITY              9
 #define OSI_STACK_SIZE                   2048
 #define AP_SSID_LEN_MAX                 32
 #define SH_GPIO_3                       3       /* P58 - Device Mode */
+
 #define AUTO_CONNECTION_TIMEOUT_COUNT   50      /* 5 Sec */
 #define SL_STOP_TIMEOUT                 200
 
@@ -1007,6 +1009,25 @@ static void ReadDeviceConfiguration()
 
 //****************************************************************************
 //
+//!    \brief Test GPIO Read and Write
+//!
+//! \return                        None
+//
+//****************************************************************************
+static void GetCoffeeStatus()
+{
+    // Get Wheight
+
+	int wheight;
+	wheight = getGram(32);
+	UART_PRINT("\t\t wheight = %d \n\r", wheight);
+
+
+}
+
+
+//****************************************************************************
+//
 //!    \brief OOB Application Main Task - Initializes SimpleLink Driver and
 //!                                              Handles HTTP Requests
 //! \param[in]                  pvParameters is the data passed to the Task
@@ -1050,6 +1071,24 @@ static void OOBTask(void *pvParameters)
             GPIO_IF_LedOff(MCU_RED_LED_GPIO);
             osi_Sleep(500);
         }
+    }
+}
+
+//****************************************************************************
+//
+//!    \brief OOB Application Main Task - Initializes SimpleLink Driver and
+//!                                              Handles HTTP Requests
+//! \param[in]                  pvParameters is the data passed to the Task
+//!
+//! \return                        None
+//
+//****************************************************************************
+static void CoffeeTask(void *pvParameters)
+{
+    //Handle Async Events
+    while(1)
+    {
+    	GetCoffeeStatus();
     }
 }
 
@@ -1113,6 +1152,7 @@ BoardInit(void)
 void main()
 {
     long   lRetVal = -1;
+    int 	tare;
 
     //
     // Board Initilization
@@ -1124,11 +1164,22 @@ void main()
     //
     PinMuxConfig();
 
-    PinConfigSet(PIN_58,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
+	PinConfigSet(PIN_58,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
+
+    //Enable Pull-down resistor for data input from load cells A and B
+    PinConfigSet(PIN_62,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
+    PinConfigSet(PIN_63,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
+
 
     // Initialize Global Variables
     InitializeAppVariables();
     
+    //
+    // HX711 Init
+    //
+    tare = Hx711();
+	UART_PRINT("\t\t tare: %d \n\r", tare);
+
     //
     // UART Init
     //
@@ -1190,8 +1241,19 @@ void main()
     {
         ERR_PRINT(lRetVal);
         LOOP_FOREVER();
-    }    
+    }
 
+    //
+    // Create Coffee Task
+    //
+    lRetVal = osi_TaskCreate(CoffeeTask, (signed char*)"CoffeeTask", \
+                                OSI_STACK_SIZE, NULL, \
+                                OOB_TASK_PRIORITY, NULL );
+    if(lRetVal < 0)
+    {
+        ERR_PRINT(lRetVal);
+        LOOP_FOREVER();
+    }    
     //
     // Start OS Scheduler
     //
