@@ -41,3 +41,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+*.obj
+*.mk
+Release/oob_linkInfo.xml
+*.map
+Release/makefile
+Release/main.obj
