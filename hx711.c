@@ -14,7 +14,7 @@ int Hx711()
 
 	tare = averageValue(32);
 	setOffset(tare);
-	setScale(0);
+	setScale(742.f);
 	return tare;
 }
 

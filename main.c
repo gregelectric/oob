@@ -1214,14 +1214,12 @@ void main()
     // HX711 load cell A/D Init
     //
     tare = Hx711();
-	UART_PRINT("\t\t tare: %d \n\r", tare);
+	UART_PRINT("Load cell tare: %d \n\r", tare);
 
-    while(1)
-    {
-        // Print wheight
-    	UART_PRINT("\t\t wheight = %d \n\r", getValue());
-    }
-
+	while(1)
+	{
+		UART_PRINT("weight in grams: %F \n\r", getGram(2));
+	}
     //
     // Simplelinkspawntask
     //
