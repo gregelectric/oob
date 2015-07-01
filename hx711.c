@@ -1,16 +1,4 @@
-// Driverlib includes
-#include "hw_types.h"
-#include "interrupt.h"
-#include "utils.h"
-#include "rom.h"
-#include "rom_map.h"
-#include "pin.h"
-
-// Common interface includes
-#include "gpio_if.h"
 #include "hx711.h"
-#include "gpio_if.h"
-#include "pinmux.h"
 
 int Hx711()
 {
@@ -21,14 +9,12 @@ int Hx711()
     GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
 
-    MAP_UtilsDelay((1)); // ?
-
     GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
 	tare = averageValue(32);
 	setOffset(tare);
-	setScale(742);
+	setScale(0);
 	return tare;
 }
 
@@ -49,50 +35,42 @@ long getValue()
 {
     unsigned int uiGPIOPort;
     unsigned char pucGPIOPin;
-    unsigned char ucPinValue;
-	int data[3];
-	int j;
+	long data = 0;
 	int i;
 
-	//Read GPIO
+
+	// Wait till HX711 is ready: Data is low
 	GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
-	while(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin))
+	while(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin));
+
+	// Read out 24 bits
+	for (i = 0; i<24; i++)
 	{
-		for (j = 3; j--;)
-		{
-			for (i = 8; i--;)
-			{
-			    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-			    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
 
-			    //Read GPIO
-			    GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
-			    ucPinValue = GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin);
+			// Set clock
+		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
 
-			    //If Connected to VCC, Mode is AP
-			    if(ucPinValue == 1)
-			    {
-			    	data[j] = 1;
-			    }
-			    else
-			    {
-			    	data[j] = 0;
-			    }
+		    // Read Bit
+		    GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+		    if(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin))
+		    {
+		    	data = (data | 1);
+		    }
+		    data = (data << 1);
 
-			    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-			    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
-			}
-		}
+		    // Clear Clock
+		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 	}
 
     GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
-	data[2] ^= 0x80;
+	//data ^= 0x80;
 
-	return ((long) data[2] << 16) | ((long) data[1] << 8)
-			| (long) data[0];
+	return data;
 }
 
 void setOffset(long offset)

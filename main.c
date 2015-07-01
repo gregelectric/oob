@@ -1016,13 +1016,8 @@ static void ReadDeviceConfiguration()
 //****************************************************************************
 static void GetCoffeeStatus()
 {
-    // Get Wheight
-
-	int wheight;
-	wheight = getGram(32);
-	UART_PRINT("\t\t wheight = %d \n\r", wheight);
-
-
+    // Print wheight
+	UART_PRINT("\t\t wheight = %d \n\r", getGram(32));
 }
 
 
@@ -1175,16 +1170,10 @@ void main()
     InitializeAppVariables();
     
     //
-    // HX711 Init
-    //
-    tare = Hx711();
-	UART_PRINT("\t\t tare: %d \n\r", tare);
-
-    //
     // UART Init
     //
     InitTerm();
-    
+
     DisplayBanner(APP_NAME);
 
     //
@@ -1222,6 +1211,18 @@ void main()
     }    
     
     //
+    // HX711 load cell A/D Init
+    //
+    tare = Hx711();
+	UART_PRINT("\t\t tare: %d \n\r", tare);
+
+    while(1)
+    {
+        // Print wheight
+    	UART_PRINT("\t\t wheight = %d \n\r", getValue());
+    }
+
+    //
     // Simplelinkspawntask
     //
     lRetVal = VStartSimpleLinkSpawnTask(SPAWN_TASK_PRIORITY);
@@ -1243,6 +1244,7 @@ void main()
         LOOP_FOREVER();
     }
 
+    /*
     //
     // Create Coffee Task
     //
@@ -1254,6 +1256,8 @@ void main()
         ERR_PRINT(lRetVal);
         LOOP_FOREVER();
     }    
+*/
+
     //
     // Start OS Scheduler
     //
