@@ -1009,20 +1009,6 @@ static void ReadDeviceConfiguration()
 
 //****************************************************************************
 //
-//!    \brief Test GPIO Read and Write
-//!
-//! \return                        None
-//
-//****************************************************************************
-static void GetCoffeeStatus()
-{
-    // Print wheight
-	UART_PRINT("\t\t wheight = %d \n\r", getGram(32));
-}
-
-
-//****************************************************************************
-//
 //!    \brief OOB Application Main Task - Initializes SimpleLink Driver and
 //!                                              Handles HTTP Requests
 //! \param[in]                  pvParameters is the data passed to the Task
@@ -1048,6 +1034,8 @@ static void OOBTask(void *pvParameters)
     //Handle Async Events
     while(1)
     {
+    	UART_PRINT("weight in grams: %F \n\r", getGram(2));
+
         //LED Actions
         if(g_ucLEDStatus == LED_ON)
         {
@@ -1066,24 +1054,6 @@ static void OOBTask(void *pvParameters)
             GPIO_IF_LedOff(MCU_RED_LED_GPIO);
             osi_Sleep(500);
         }
-    }
-}
-
-//****************************************************************************
-//
-//!    \brief OOB Application Main Task - Initializes SimpleLink Driver and
-//!                                              Handles HTTP Requests
-//! \param[in]                  pvParameters is the data passed to the Task
-//!
-//! \return                        None
-//
-//****************************************************************************
-static void CoffeeTask(void *pvParameters)
-{
-    //Handle Async Events
-    while(1)
-    {
-    	GetCoffeeStatus();
     }
 }
 
@@ -1215,11 +1185,8 @@ void main()
     //
     tare = Hx711();
 	UART_PRINT("Load cell tare: %d \n\r", tare);
+	UART_PRINT("Weight in grams: %F \n\r", getGram(2));
 
-	while(1)
-	{
-		UART_PRINT("weight in grams: %F \n\r", getGram(2));
-	}
     //
     // Simplelinkspawntask
     //
@@ -1241,20 +1208,6 @@ void main()
         ERR_PRINT(lRetVal);
         LOOP_FOREVER();
     }
-
-    /*
-    //
-    // Create Coffee Task
-    //
-    lRetVal = osi_TaskCreate(CoffeeTask, (signed char*)"CoffeeTask", \
-                                OSI_STACK_SIZE, NULL, \
-                                OOB_TASK_PRIORITY, NULL );
-    if(lRetVal < 0)
-    {
-        ERR_PRINT(lRetVal);
-        LOOP_FOREVER();
-    }    
-*/
 
     //
     // Start OS Scheduler

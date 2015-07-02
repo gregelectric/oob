@@ -68,8 +68,6 @@ long getValue()
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
-	//data ^= 0x80;
-
 	return data;
 }
 
@@ -86,5 +84,5 @@ void setScale(float scale)
 float getGram(int times)
 {
 	long val = (averageValue(times) - _offset);
-	return (float) val / _scale;
+	return abs((float) val / _scale);
 }
