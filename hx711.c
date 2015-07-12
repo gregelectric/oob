@@ -1,10 +1,9 @@
 #include "hx711.h"
 
-int Hx711()
+void Hx711(long * data)
 {
     unsigned int uiGPIOPort;
     unsigned char pucGPIOPin;
-    int tare;
 
     GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
@@ -12,38 +11,45 @@ int Hx711()
     GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
-	tare = averageValue(32);
-	setOffset(tare);
-	setScale(742.f);
-	return tare;
+	averageValue(32, data);
+	setOffsetA(data[0]);
+	setScaleA(853.3f);
+	setOffsetB(data[1]);
+	setScaleB(222.6f);
+	return;
 }
 
-long averageValue(int times)
+void averageValue(int times, long *data)
 {
 	int i;
-	long sum = 0;
+    long   ave[2] = {0, 0};
 
 	for (i = 0; i < times; i++)
 	{
-		sum += getValue();
+		getValue(data);
+		ave[0] += data[0];
+		ave[1] += data[1];
 	}
 
-	return sum / times;
+	data[0] = ave[0] / times;
+	data[1] = ave[1] / times;
+	return;
 }
 
-long getValue()
+void getValue(long * data)
 {
     unsigned int uiGPIOPort;
     unsigned char pucGPIOPin;
-	long data = 0;
 	int i;
+	long dataA = 0;
+	long dataB = 0;
 
 
 	// Wait till HX711 is ready: Data is low
 	GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
 	while(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin));
 
-	// Read out 24 bits
+	// Read Channel A Gain 128 - 24 bits
 	for (i = 0; i<24; i++)
 	{
 
@@ -55,34 +61,84 @@ long getValue()
 		    GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
 		    if(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin))
 		    {
-		    	data = (data | 1);
+		    	dataA = (dataA | 1);
 		    }
-		    data = (data << 1);
+		    dataA = (dataA << 1);
 
 		    // Clear Clock
 		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
 		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 	}
 
+	// Set next conversionto Channel B Gain 32 - 24 bits
+    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+
+	// Wait till HX711 is ready: Data is low
+	GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+	while(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin));
+
+	// Read Channel B Gain 32 - 24 bits
+	for (i = 0; i<24; i++)
+	{
+
+			// Set clock
+		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+
+		    // Read Bit
+		    GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+		    if(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin))
+		    {
+		    	dataB = (dataB | 1);
+		    }
+		    dataB = (dataB << 1);
+
+		    // Clear Clock
+		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+	}
+
+	// Set next conversionto Channel A Gain 128 - 24 bits
     GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
     GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
-	return data;
+    data[0] = dataA;
+    data[1] = dataB;
+    return;
 }
 
-void setOffset(long offset)
+void setOffsetA(long offset)
 {
-	_offset = offset;
+	_offsetA = offset;
+    return;
 }
 
-void setScale(float scale)
+void setScaleA(float scale)
 {
-	_scale = scale;
+	_scaleA = scale;
+    return;
+}
+void setOffsetB(long offset)
+{
+	_offsetB = offset;
+    return;
 }
 
-float getGram(int times)
+void setScaleB(float scale)
 {
-	long val = (averageValue(times) - _offset);
-	return abs((float) val / _scale);
+	_scaleB = scale;
+    return;
+}
+
+void getGram(int times, long * data)
+{
+	averageValue(times, data);
+	data[0] = labs( (data[0] - _offsetA) / _scaleA);
+	data[1] = labs( (data[1] - _offsetB) / _scaleB);
+	return;
 }

@@ -1019,6 +1019,7 @@ static void ReadDeviceConfiguration()
 static void OOBTask(void *pvParameters)
 {
     long   lRetVal = -1;
+    long   data[2];
 
     //Read Device Mode Configuration
     ReadDeviceConfiguration();
@@ -1034,7 +1035,8 @@ static void OOBTask(void *pvParameters)
     //Handle Async Events
     while(1)
     {
-    	UART_PRINT("weight in grams: %F \n\r", getGram(2));
+    	getGram(2, data);
+    	UART_PRINT("Weight in gramsA: %F gramsB: %F \n\r", data[0], data[1]);
 
         //LED Actions
         if(g_ucLEDStatus == LED_ON)
@@ -1117,7 +1119,7 @@ BoardInit(void)
 void main()
 {
     long   lRetVal = -1;
-    int 	tare;
+    long   data[2] = {0, 0};
 
     //
     // Board Initilization
@@ -1183,9 +1185,17 @@ void main()
     //
     // HX711 load cell A/D Init
     //
-    tare = Hx711();
-	UART_PRINT("Load cell tare: %d \n\r", tare);
-	UART_PRINT("Weight in grams: %F \n\r", getGram(2));
+    Hx711(data);
+	UART_PRINT("Load cell A tare: %d B tare: %d \n\r", data[0], data[1]);
+	data[0] = 0;
+	data[1] = 0;
+    while (1)
+    {
+    	getGram(10, data);
+    	UART_PRINT("Load cell A: %d g B: %d g \n\r", data[0], data[1]);
+    	data[0] = 0;
+    	data[1] = 0;
+    }
 
     //
     // Simplelinkspawntask
