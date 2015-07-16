@@ -14,20 +14,18 @@
 #include "pin.h"
 
 // Common interface includes
-#include "gpio_if.h"
-#include "uart_if.h"
-#include "i2c_if.h"
-#include "common.h"
+//#include "gpio_if.h"
+//#include "uart_if.h"
+//#include "i2c_if.h"
+//#include "common.h"
 
 // Common interface includes
 #include "gpio_if.h"
 #include "pinmux.h"
 
 // Pinout to HX711
-#define DTA_GPIO_08                  	8       /* P63 - Data Input scale A */
-#define CLKB_GPIO_30                  	30      /* P53 - Clock Output scale A */
-#define DTB_GPIO_07                    	7       /* P62 - Data Input scale B */
-#define CLKB_GPIO_00                    0       /* P50 - Clock Output scale B */
+#define DT_GPIO_07                    	7       /* P62 - Data Input scale B */
+#define CLK_GPIO_00                    0       /* P50 - Clock Output scale B */
 
 void Hx711(long * data);
 void getGram(int times, long * data);

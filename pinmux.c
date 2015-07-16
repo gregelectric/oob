@@ -82,18 +82,6 @@ PinMuxConfig(void)
     MAP_PinTypeGPIO(PIN_64, PIN_MODE_0, false);
     MAP_GPIODirModeSet(GPIOA1_BASE, 0x2, GPIO_DIR_MODE_OUT);
 
-    // DATA A
-    // Configure PIN_63 for GPIO Input
-    //
-    MAP_PinTypeGPIO(PIN_63, PIN_MODE_0, false);
-    MAP_GPIODirModeSet(GPIOA1_BASE, 0x1, GPIO_DIR_MODE_IN);
-
-    // CLOCK A
-    // Configure PIN_53 for GPIO Output
-    //
-    //MAP_PinTypeGPIO(PIN_53, PIN_MODE_0, false);
-    //MAP_GPIODirModeSet(GPIOA3_BASE, 0x40, GPIO_DIR_MODE_OUT);
-
     // DATA B
     // Configure PIN_62 for GPIO Input
     //

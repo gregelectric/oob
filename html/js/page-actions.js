@@ -36,6 +36,8 @@ $(document).ready(function(){
 	var filename = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
 	if (filename.indexOf('overview') > -1) {
 		$("#overview").toggleClass("active");
+	} else if (filename.indexOf('coffee') > -1) {
+		$("#coffee").toggleClass("active");
 	} else if (filename.indexOf('about') > -1) {
 		$("#about").toggleClass("active");
 	} else if (filename.indexOf('setup') > -1) {

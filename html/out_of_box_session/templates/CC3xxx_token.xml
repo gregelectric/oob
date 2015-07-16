@@ -201,4 +201,14 @@
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
+   <Filename name="www/coffee.html">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/images/coffee_pot.png">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
 </CC3xxx>

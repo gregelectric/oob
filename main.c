@@ -127,6 +127,7 @@ static unsigned char POST_token[] = "__SL_P_ULD";
 static unsigned char GET_token_TEMP[]  = "__SL_G_UTP";
 static unsigned char GET_token_ACC[]  = "__SL_G_UAC";
 static unsigned char GET_token_UIC[]  = "__SL_G_UIC";
+static unsigned char GET_token_WHEIGHT[]  = "__SL_G_UWH";
 static int g_iInternetAccess = -1;
 static unsigned char g_ucDryerRunning = 0;
 static unsigned int g_uiDeviceModeConfig = ROLE_STA; //default is STA mode
@@ -612,6 +613,7 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
 
             ptr = pSlHttpServerResponse->ResponseData.token_value.data;
             pSlHttpServerResponse->ResponseData.token_value.len = 0;
+
             if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, 
                     GET_token_TEMP, strlen((const char *)GET_token_TEMP)) == 0)
             {
@@ -621,6 +623,21 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                 short sTempLen = itoa(cTemp,(char*)ptr);
                 ptr[sTempLen++] = ' ';
                 ptr[sTempLen] = 'F';
+                pSlHttpServerResponse->ResponseData.token_value.len += sTempLen;
+
+            }
+
+            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data,
+                    GET_token_WHEIGHT, strlen((const char *)GET_token_WHEIGHT)) == 0)
+            {
+                long data[2];
+                getGram(10, data);
+                char cTemp = (char)data[0];
+                short sTempLen = itoa(cTemp,(char*)ptr);
+                ptr[sTempLen++] = ' ';
+                cTemp = (char)data[1];
+                sTempLen = itoa(cTemp,(char*)ptr);
+                ptr[sTempLen++] = ' ';
                 pSlHttpServerResponse->ResponseData.token_value.len += sTempLen;
 
             }
@@ -1022,8 +1039,7 @@ static void OOBTask(void *pvParameters)
     long   data[2];
 
     //Read Device Mode Configuration
-    //ReadDeviceConfiguration();
-    g_uiDeviceModeConfig = ROLE_STA;
+    ReadDeviceConfiguration();
 
     //Connect to Network
     lRetVal = ConnectToNetwork();
@@ -1136,8 +1152,6 @@ void main()
 
     //Enable Pull-down resistor for data input from load cells A and B
     PinConfigSet(PIN_62,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
-    PinConfigSet(PIN_63,PIN_STRENGTH_2MA|PIN_STRENGTH_4MA,PIN_TYPE_STD_PD);
-
 
     // Initialize Global Variables
     InitializeAppVariables();

@@ -45,5 +45,7 @@ Temporary Items
 *.mk
 Release/oob_linkInfo.xml
 *.map
+*.bin
+*.obj
 Release/makefile
 Release/main.obj

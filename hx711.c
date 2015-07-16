@@ -5,11 +5,11 @@ void Hx711(long * data)
     unsigned int uiGPIOPort;
     unsigned char pucGPIOPin;
 
-    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
 
-    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
 	averageValue(32, data);
 	setOffsetA(data[0]);
@@ -46,66 +46,66 @@ void getValue(long * data)
 
 
 	// Wait till HX711 is ready: Data is low
-	GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
-	while(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin));
+	GPIO_IF_GetPortNPin(DT_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+	while(GPIO_IF_Get(DT_GPIO_07,uiGPIOPort,pucGPIOPin));
 
 	// Read Channel A Gain 128 - 24 bits
 	for (i = 0; i<24; i++)
 	{
 
 			// Set clock
-		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+		    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
 
 		    // Read Bit
-		    GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
-		    if(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin))
+		    GPIO_IF_GetPortNPin(DT_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+		    if(GPIO_IF_Get(DT_GPIO_07,uiGPIOPort,pucGPIOPin))
 		    {
 		    	dataA = (dataA | 1);
 		    }
 		    dataA = (dataA << 1);
 
 		    // Clear Clock
-		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+		    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 	}
 
 	// Set next conversionto Channel B Gain 32 - 24 bits
-    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
 	// Wait till HX711 is ready: Data is low
-	GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
-	while(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin));
+	GPIO_IF_GetPortNPin(DT_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+	while(GPIO_IF_Get(DT_GPIO_07,uiGPIOPort,pucGPIOPin));
 
 	// Read Channel B Gain 32 - 24 bits
 	for (i = 0; i<24; i++)
 	{
 
 			// Set clock
-		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+		    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
 
 		    // Read Bit
-		    GPIO_IF_GetPortNPin(DTB_GPIO_07,&uiGPIOPort,&pucGPIOPin);
-		    if(GPIO_IF_Get(DTB_GPIO_07,uiGPIOPort,pucGPIOPin))
+		    GPIO_IF_GetPortNPin(DT_GPIO_07,&uiGPIOPort,&pucGPIOPin);
+		    if(GPIO_IF_Get(DT_GPIO_07,uiGPIOPort,pucGPIOPin))
 		    {
 		    	dataB = (dataB | 1);
 		    }
 		    dataB = (dataB << 1);
 
 		    // Clear Clock
-		    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-		    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+		    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+		    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 	}
 
 	// Set next conversionto Channel A Gain 128 - 24 bits
-    GPIO_IF_GetPortNPin(CLKB_GPIO_00,&uiGPIOPort,&pucGPIOPin);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
-    GPIO_IF_Set(CLKB_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
+    GPIO_IF_GetPortNPin(CLK_GPIO_00,&uiGPIOPort,&pucGPIOPin);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 1);
+    GPIO_IF_Set(CLK_GPIO_00, uiGPIOPort, pucGPIOPin, 0);
 
     data[0] = dataA;
     data[1] = dataB;
