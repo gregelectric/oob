@@ -67,6 +67,7 @@
 // Standard includes
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 // Simplelink includes
 #include "simplelink.h"
@@ -632,13 +633,11 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
             {
                 long data[2];
                 getGram(10, data);
-                char cTemp = (char)data[0];
-                short sTempLen = itoa(cTemp,(char*)ptr);
-                ptr[sTempLen++] = ' ';
-                cTemp = (char)data[1];
-                sTempLen = itoa(cTemp,(char*)ptr);
-                ptr[sTempLen++] = ' ';
-                pSlHttpServerResponse->ResponseData.token_value.len += sTempLen;
+             	const int n = snprintf(NULL, 0, "%lu", data[0]);
+            	char buf[n+1];
+            	int c = snprintf(buf, n+1, "%lu", data[0]);
+                pSlHttpServerResponse->ResponseData.token_value.data = buf;
+                pSlHttpServerResponse->ResponseData.token_value.len += c;
 
             }
 
@@ -731,6 +730,7 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
             break;
     }
 }
+
 
 //*****************************************************************************
 //
