@@ -10,7 +10,7 @@
 <script type="text/javascript">
 $(function() {
     var Device_Temperature = $('#Device_Temperature_out'),
-    	Device_Wheight = $('#Device_Wheight_out'),
+    	Device_Weight = $('#Device_Weight_out'),
         Device_Accelerometer = $('#Device_Accelerometer_out'),
         demoPolling = new com.TI.tokenPoller({
             "paramPage": "param_demos.html", 
@@ -38,14 +38,14 @@ $(function() {
                 }
             }, 
             { 
-            "paramId": "Device_Wheight",
+            "paramId": "Device_Weight",
                 "outputSuccess": function(output) 
                 {
-                    Device_Wheight.html(output);
+                    Device_Weight.html(output);
                 },
                 "outputDefault": function() 
                 {
-                    Device_Wheight.html("<i>reloading</i>");
+                    Device_Weight.html("<i>reloading</i>");
                 }
             },
             }]
@@ -77,7 +77,7 @@ $(function() {
     	<h2>Teradici Coffee Status(1st floor)</h2>
         <p style="font-weight:normal;">Below is the wheight in grams of both dark and medium Teradici coffee pots. Future features include coffee temperature, freshness, real-time consumption and other usefull services.</p>
         <div class="washDryer">
-            <div class="washerText">Dark:<br /><span id="Device_Wheight_out"><i>reloading</i></span></div>&nbsp;&nbsp;&nbsp;<div class="dryerText">Medium:<br /><span id="Device_Wheight_out"><i>reloading</i></span></div>
+            <div class="washerText">Dark:<br /><span id="Device_Weight_out"><i>reloading</i></span></div>&nbsp;&nbsp;&nbsp;<div class="dryerText">Medium:<br /><span id="Device_Weight_out"><i>reloading</i></span></div>
             <br style="clear:both;" /><br>
             <img src="images/coffee_pot.png" name="coffee_pot" width="300" id="coffee_pot" />
         </div>

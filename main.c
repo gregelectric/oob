@@ -128,7 +128,7 @@ static unsigned char POST_token[] = "__SL_P_ULD";
 static unsigned char GET_token_TEMP[]  = "__SL_G_UTP";
 static unsigned char GET_token_ACC[]  = "__SL_G_UAC";
 static unsigned char GET_token_UIC[]  = "__SL_G_UIC";
-static unsigned char GET_token_WHEIGHT[]  = "__SL_G_UWH";
+static unsigned char GET_token_WEIGHT[]  = "__SL_G_UWE";
 static int g_iInternetAccess = -1;
 static unsigned char g_ucDryerRunning = 0;
 static unsigned int g_uiDeviceModeConfig = ROLE_STA; //default is STA mode
@@ -629,7 +629,7 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
             }
 
             if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data,
-                    GET_token_WHEIGHT, strlen((const char *)GET_token_WHEIGHT)) == 0)
+                    GET_token_WEIGHT, strlen((const char *)GET_token_WEIGHT)) == 0)
             {
                 long data[2];
                 getGram(10, data);
