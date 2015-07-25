@@ -16,46 +16,6 @@
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
-   <Filename name="www/about.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/demos.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/demos-appliances.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/demos-energy.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/demos-security.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/demos-sprinkler.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/overview.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/param_about.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
    <Filename name="www/param_config.html">
       <MAX>0x0</MAX>
       <RW>0x0</RW>
@@ -71,11 +31,6 @@
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
-   <Filename name="www/portal.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
    <Filename name="www/setup.html">
       <MAX>0x0</MAX>
       <RW>0x0</RW>
@@ -86,72 +41,12 @@
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
-   <Filename name="www/images/demo-lightswitch.jpg">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/demo-security-alarmOff.jpg">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/demo-security-alarmOn.jpg">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/demo-sprinkler-on.jpg">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/demo-sprinkler-off.jpg">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/demo-washerDryer.jpg">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/hw-sbd.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/icon_l_html_a.png">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/icon-demo-homeAppliances.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/icon-demo-homeAutomation.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/ticom3-tab-left.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
    <Filename name="www/images/tab-line.gif">
       <MAX>0x0</MAX>
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
    <Filename name="www/images/ticom3-tab-right.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/ti-logo.png">
       <MAX>0x0</MAX>
       <RW>0x0</RW>
       <RO>0x0</RO>
@@ -186,27 +81,17 @@
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
-   <Filename name="www/images/icon-demo-safety.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/icon-demo-smartEnergy.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/images/sw-sbd.gif">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/coffee.html">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
    <Filename name="www/images/coffee_pot.png">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/images/ticom3-tab-left.gif">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/images/logo-black.png">
       <MAX>0x0</MAX>
       <RW>0x0</RW>
       <RO>0x0</RO>

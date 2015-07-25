@@ -136,8 +136,7 @@ static unsigned char g_ucLEDStatus = LED_OFF;
 static unsigned long  g_ulStatus = 0;//SimpleLink Status
 static unsigned char  g_ucConnectionSSID[SSID_LEN_MAX+1]; //Connection SSID
 static unsigned char  g_ucConnectionBSSID[BSSID_LEN_MAX]; //Connection BSSID
-
-
+	
 #if defined(ccs)
 extern void (* const g_pfnVectors[])(void);
 #endif
@@ -631,10 +630,9 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
 
             if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, GET_token_WEIGHT, strlen((const char *)GET_token_WEIGHT)) == 0)
             {
-
-            	UART_PRINT("SimpleLinkHttpServerCallback: %s \n\r", GET_token_WEIGHT);
-                long weight;
+                long weight = 0;
                 weight = getGram(1);
+				UART_PRINT("Weight: %d g \n\r", weight);
             	int c = sprintf((char*)ptr, "%lu", weight);
                 pSlHttpServerResponse->ResponseData.token_value.len += c+1;
             }
@@ -655,8 +653,8 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                 ReadAccSensor();
                 if(g_ucDryerRunning)
                 {
-                    strcpy((char*)pSlHttpServerResponse->ResponseData.token_value.data,"Running");
-                    pSlHttpServerResponse->ResponseData.token_value.len += strlen("Running");
+                    strcpy((char*)pSlHttpServerResponse->ResponseData.token_value.data,"Moving");
+                    pSlHttpServerResponse->ResponseData.token_value.len += strlen("Moving");
                 }
                 else
                 {
@@ -1031,7 +1029,6 @@ static void ReadDeviceConfiguration()
 static void OOBTask(void *pvParameters)
 {
     long   lRetVal = -1;
-    long   weight;
 
     //Read Device Mode Configuration
     ReadDeviceConfiguration();
@@ -1047,8 +1044,8 @@ static void OOBTask(void *pvParameters)
     //Handle Async Events
     while(1)
     {
-    	weight = getGram(1);
-    	UART_PRINT("Weight: %d g \n\r", weight);
+    	//weight = getGram(1);
+    	//UART_PRINT("Weight: %d g \n\r", weight);
 
         //LED Actions
         if(g_ucLEDStatus == LED_ON)
@@ -1085,7 +1082,7 @@ DisplayBanner(char * AppName)
 {
     UART_PRINT("\n\n\n\r");
     UART_PRINT("\t\t *************************************************\n\r");
-    UART_PRINT("\t\t     gregelectric %s       \n\r", AppName);
+    UART_PRINT("\t\t          gregelectric %s       \n\r", AppName);
     UART_PRINT("\t\t *************************************************\n\r");
     UART_PRINT("\n\n\n\r");
 }
@@ -1131,7 +1128,7 @@ BoardInit(void)
 void main()
 {
     long   lRetVal = -1;
-    long   weight;
+	long   weight;
 
     //
     // Board Initilization
@@ -1209,11 +1206,6 @@ void main()
         LOOP_FOREVER();
     }    
     
-    //while(1)
-    //{
-   // 	getGram(1, weight);
-  //  	UART_PRINT("Weight: %d g \n\r", weight);
-   // }
     //
     // Create OOB Task
     //
