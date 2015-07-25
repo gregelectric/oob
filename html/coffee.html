@@ -9,35 +9,14 @@
 <script src="js/page-actions.js"></script>
 <script type="text/javascript">
 $(function() {
-    var Device_Temperature = $('#Device_Temperature_out'),
-    	Device_Weight = $('#Device_Weight_out'),
-        Device_Accelerometer = $('#Device_Accelerometer_out'),
-        demoPolling = new com.TI.tokenPoller({
+    var Device_Weight = $('#Device_Weight_out'),
+        Device_Accelerometer = $('#Device_Accelerometer_out'),    
+        demoPolling = new com.TI.tokenPoller(
+        {
             "paramPage": "param_demos.html", 
-            "refreshRate": 200,
-            "valueMap": [{
-            "paramId": "Device_Temperature",
-                "outputSuccess": function(output) 
-                {
-                    Device_Temperature.html(output);
-                },
-                "outputDefault": function() 
-                {
-                    Device_Temperature.html("<i>reloading</i>");
-                }
-            },
-            {
-            "paramId": "Device_Accelerometer",
-                "outputSuccess": function(output) 
-                {
-                    Device_Accelerometer.html(output);
-                },
-                "outputDefault": function() 
-                {
-                    Device_Accelerometer.html("<i>reloading</i>");
-                }
-            }, 
-            { 
+            "refreshRate": 2000,
+            "valueMap": 
+            [{
             "paramId": "Device_Weight",
                 "outputSuccess": function(output) 
                 {
@@ -46,12 +25,19 @@ $(function() {
                 "outputDefault": function() 
                 {
                     Device_Weight.html("<i>reloading</i>");
-                }
-            },
+                }  
+            "paramId": "Device_Accelerometer",
+                "outputSuccess": function(output) {
+                    Device_Accelerometer.html(output);
+                },
+                "outputDefault": function() {
+                    Device_Accelerometer.html("<i>reloading</i>");
+                }             
             }]
         });
 });
 </script>
+
 <title>Coffee</title>
 </head>
 <body>
@@ -69,17 +55,17 @@ $(function() {
     <li class="" id="about"><a href="about.html"><span>About</span></a></li>
     <li class="" id="setup"><a href="setup.html"><span>Setup</span></a></li>
     <li class="" id="portal"><a href="portal.html"><span>Developer's Portal</span></a></li>
-<li class="" id="demos"><a href="demos.html"><span>Demos</span></a></li>
+	<li class="" id="demos"><a href="demos.html"><span>Demos</span></a></li>
     </ul>
 </div>
 <div class="content">
-    <div class="demo">
+    <div class="coffee">
     	<h2>Teradici Coffee Status(1st floor)</h2>
         <p style="font-weight:normal;">Below is the wheight in grams of both dark and medium Teradici coffee pots. Future features include coffee temperature, freshness, real-time consumption and other usefull services.</p>
         <div class="washDryer">
-            <div class="washerText">Dark:<br /><span id="Device_Weight_out"><i>reloading</i></span></div>&nbsp;&nbsp;&nbsp;<div class="dryerText">Medium:<br /><span id="Device_Weight_out"><i>reloading</i></span></div>
+            <div class="washerText">Weight:<br /><span id="Device_Weight_out"><i>reloading</i></span></div>&nbsp;&nbsp;&nbsp;<div class="dryerText">Medium:<br /><span id="Device_Accelerometer_out"><i>reloading</i></span></div>
             <br style="clear:both;" /><br>
-            <img src="images/coffee_pot.png" name="coffee_pot" width="300" id="coffee_pot" />
+            <img src="images/coffee_pot.png" name="coffee_pot" width="200" id="coffee_pot" />
         </div>
     </div>
 </div>

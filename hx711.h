@@ -27,17 +27,14 @@
 #define DT_GPIO_07                    	7       /* P62 - Data Input scale B */
 #define CLK_GPIO_00                    0       /* P50 - Clock Output scale B */
 
-void Hx711(long * data);
-void getGram(int times, long * data);
-void getValue(long * data);
-void averageValue(int times, long * data);
-void setOffsetA(long offset);
-void setScaleA(float scale);
-void setOffsetB(long offset);
-void setScaleB(float scale);
+long HX711_Tare(int times);
+long getGram(int times);
+long getValue(void);
+long averageValue(int times);
+void setOffset(long offset);
+void setScale(float scale);
 
-long _offsetA;
-float _scaleA;
-long _offsetB;
-float _scaleB;
+long _offset;
+float _scale;
+
 #endif /* HX711_H_ */

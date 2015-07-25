@@ -34,17 +34,28 @@ com.TI.toggleLED = function(whichOne) {
 $(document).ready(function(){ 
 
 	var filename = window.location.href.substr(window.location.href.lastIndexOf("/")+1);
-	if (filename.indexOf('overview') > -1) {
+	if (filename.indexOf('overview') > -1) 
+	{
 		$("#overview").toggleClass("active");
-	} else if (filename.indexOf('coffee') > -1) {
+	} 
+	else if (filename.indexOf('coffee') > -1) 
+	{
 		$("#coffee").toggleClass("active");
-	} else if (filename.indexOf('about') > -1) {
+	} 
+	else if (filename.indexOf('about') > -1) 
+	{
 		$("#about").toggleClass("active");
-	} else if (filename.indexOf('setup') > -1) {
+	} 
+	else if (filename.indexOf('setup') > -1) 
+	{
 		$("#setup").toggleClass("active");
-	} else if (filename.indexOf('portal') > -1) {
+	} 
+	else if (filename.indexOf('portal') > -1) 
+	{
 		$("#portal").toggleClass("active");
-	} else if (filename.indexOf('demos') > -1) {
+	} 
+	else if (filename.indexOf('demos') > -1) 
+	{
 		$("#demos").toggleClass("active");
 	}
 

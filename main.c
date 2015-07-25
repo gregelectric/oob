@@ -606,6 +606,7 @@ void SimpleLinkNetAppEventHandler(SlNetAppEvent_t *pNetAppEvent)
 void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent, 
                                 SlHttpServerResponse_t *pSlHttpServerResponse)
 {
+
     switch (pSlHttpServerEvent->Event)
     {
         case SL_NETAPP_HTTPGETTOKENVALUE_EVENT:
@@ -615,9 +616,9 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
             ptr = pSlHttpServerResponse->ResponseData.token_value.data;
             pSlHttpServerResponse->ResponseData.token_value.len = 0;
 
-            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, 
-                    GET_token_TEMP, strlen((const char *)GET_token_TEMP)) == 0)
+            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, GET_token_TEMP, strlen((const char *)GET_token_TEMP)) == 0)
             {
+            	UART_PRINT("SimpleLinkHttpServerCallback: %s \n\r", GET_token_TEMP);
                 float fCurrentTemp;
                 TMP006DrvGetTemp(&fCurrentTemp);
                 char cTemp = (char)fCurrentTemp;
@@ -628,22 +629,19 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
 
             }
 
-            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data,
-                    GET_token_WEIGHT, strlen((const char *)GET_token_WEIGHT)) == 0)
+            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, GET_token_WEIGHT, strlen((const char *)GET_token_WEIGHT)) == 0)
             {
-                long data[2];
-                getGram(10, data);
-             	const int n = snprintf(NULL, 0, "%lu", data[0]);
-            	char buf[n+1];
-            	int c = snprintf(buf, n+1, "%lu", data[0]);
-                pSlHttpServerResponse->ResponseData.token_value.data = buf;
-                pSlHttpServerResponse->ResponseData.token_value.len += c;
 
+            	UART_PRINT("SimpleLinkHttpServerCallback: %s \n\r", GET_token_WEIGHT);
+                long weight;
+                weight = getGram(1);
+            	int c = sprintf((char*)ptr, "%lu", weight);
+                pSlHttpServerResponse->ResponseData.token_value.len += c+1;
             }
 
-            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, 
-                      GET_token_UIC, strlen((const char *)GET_token_UIC)) == 0)
+            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, GET_token_UIC, strlen((const char *)GET_token_UIC)) == 0)
             {
+            	UART_PRINT("SimpleLinkHttpServerCallback: %s \n\r", GET_token_UIC);
                 if(g_iInternetAccess==0)
                     strcpy((char*)pSlHttpServerResponse->ResponseData.token_value.data,"1");
                 else
@@ -651,10 +649,9 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                 pSlHttpServerResponse->ResponseData.token_value.len =  1;
             }
 
-            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, 
-                       GET_token_ACC, strlen((const char *)GET_token_ACC)) == 0)
+            if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, GET_token_ACC, strlen((const char *)GET_token_ACC)) == 0)
             {
-
+            	UART_PRINT("SimpleLinkHttpServerCallback: %s \n\r", GET_token_ACC);
                 ReadAccSensor();
                 if(g_ucDryerRunning)
                 {
@@ -667,11 +664,9 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                     pSlHttpServerResponse->ResponseData.token_value.len += strlen("Stopped");
                 }
             }
-
-
-
-        }
             break;
+        }
+
 
         case SL_NETAPP_HTTPPOSTTOKENVALUE_EVENT:
         {
@@ -722,10 +717,10 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                         GPIO_IF_LedOff(MCU_ORANGE_LED_GPIO);
                     }
                 }
-
             }
-        }
             break;
+        }
+
         default:
             break;
     }
@@ -1036,7 +1031,7 @@ static void ReadDeviceConfiguration()
 static void OOBTask(void *pvParameters)
 {
     long   lRetVal = -1;
-    long   data[2];
+    long   weight;
 
     //Read Device Mode Configuration
     ReadDeviceConfiguration();
@@ -1052,8 +1047,8 @@ static void OOBTask(void *pvParameters)
     //Handle Async Events
     while(1)
     {
-    	getGram(10, data);
-    	UART_PRINT("Load cell A: %d g B: %d g \n\r", data[0], data[1]);
+    	weight = getGram(1);
+    	UART_PRINT("Weight: %d g \n\r", weight);
 
         //LED Actions
         if(g_ucLEDStatus == LED_ON)
@@ -1090,7 +1085,7 @@ DisplayBanner(char * AppName)
 {
     UART_PRINT("\n\n\n\r");
     UART_PRINT("\t\t *************************************************\n\r");
-    UART_PRINT("\t\t     CC3200 %s Application       \n\r", AppName);
+    UART_PRINT("\t\t     gregelectric %s       \n\r", AppName);
     UART_PRINT("\t\t *************************************************\n\r");
     UART_PRINT("\n\n\n\r");
 }
@@ -1136,7 +1131,7 @@ BoardInit(void)
 void main()
 {
     long   lRetVal = -1;
-    long   data[2] = {0, 0};
+    long   weight;
 
     //
     // Board Initilization
@@ -1200,8 +1195,9 @@ void main()
     //
     // HX711 load cell A/D Init
     //
-    Hx711(data);
-	UART_PRINT("Load cell A tare: %d B tare: %d \n\r", data[0], data[1]);
+
+    weight = HX711_Tare(10);
+	UART_PRINT("Load cell tare: %d \n\r", weight);
 
     //
     // Simplelinkspawntask
@@ -1213,6 +1209,11 @@ void main()
         LOOP_FOREVER();
     }    
     
+    //while(1)
+    //{
+   // 	getGram(1, weight);
+  //  	UART_PRINT("Weight: %d g \n\r", weight);
+   // }
     //
     // Create OOB Task
     //
